@@ -17,6 +17,8 @@ public interface ProductService {
 
     ProductDto findOne(Integer id);
 
+    ProductDto findByName(String productName);
+
     Double calculatePrice(List<OrderDto> orderDtos);
 
     ProductDto addProduct(ProductDto product);

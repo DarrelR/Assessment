@@ -114,20 +114,19 @@
                                 <td th:text="${product.productName}">Product 1</td>
                                 <td th:text="${product.boxPrice}">85</td>
                                 <td th:text="${product.unitsPerBox}">20</td>
-                                <td th:text="${product.unitPrice}">20</td>
+                                <td th:text="${#numbers.formatDecimal(product.unitPrice,0,'COMMA',0,'POINT')}">20</td>
                                 <td>
-                                    <select class="form-control" id="sel1">
-                                        <option th:each="state : ${T(com.assessment.spring.model.OrderType).values()}"
-                                                th:value="${state}"
-                                                th:text="${state}"></option>
+                                    <select class="form-control" th:id="'orderType'+${product.id}">
+                                        <option th:each="type : ${T(com.assessment.spring.model.OrderType).values()}"
+                                                th:value="${type}"
+                                                th:text="${type}"></option>
                                     </select>
                                 </td>
-                                <td width="150px"><input class="form-control" type="number" id="itemCount"
-                                                         placeholder="units" min="0"></td>
-                                <!--<td><a id="add-item-btn" class="btn btn-primary btn-s">ADD</a>-->
-                                <!--<a id="add-item-btn" class="btn btn-primary btn-s">ADD</a></td>-->
+                                <td width="150px"><input th:id="'itemQuantity'+${product.id}" class="form-control"
+                                                         type="number" placeholder="units" min="0"></td>
                                 <td>
-                                    <a th:href="@{'/products/add/' + ${product.id}}">ADD</a>
+                                    <!--<a th:href="@{'/products/add/' + ${product.id}}">ADD</a>-->
+                                    <a th:onclick="'addOrder('+${product.id}+')'">ADD</a>
                                 </td>
                             </tr>
                             </tbody>
@@ -206,7 +205,7 @@
 
 </div>
 <!-- ./wrapper -->
-
+<script type="text/javascript" src="/static/js/product.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script src="webjars/bootstrap/3.3.4/js/bootstrap.min.js"></script>
 

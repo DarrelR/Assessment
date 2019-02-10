@@ -11,6 +11,7 @@ import java.io.Serializable;
 @Data
 public class OrderDto implements Serializable{
     private Integer productId;
+    private String productName;
     private OrderType orderType;
     private Integer quantity;
 

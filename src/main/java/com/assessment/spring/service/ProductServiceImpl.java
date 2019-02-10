@@ -81,4 +81,11 @@ public class ProductServiceImpl implements ProductService {
         newProduct.setUnitPrice(unitPrice);
         return new ProductDto(productRepository.saveAndFlush(newProduct));
     }
+
+    @Override
+    @Transactional(readOnly = true)
+    public ProductDto findByName(String productName) {
+        Product product = productRepository.findByProductName(productName);
+        return product != null ? new ProductDto(product) : null;
+    }
 }
