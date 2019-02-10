@@ -1,12 +1,10 @@
 package com.assessment.spring.controller;
 
-import com.assessment.spring.dto.OrderDto;
 import com.assessment.spring.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * Created by Darrel Rayen on 2/11/19.
@@ -22,8 +20,14 @@ public class ProductRestController {
         this.productService = productService;
     }
 
-    @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity<OrderDto> addOrder(){
-        return null;
+    @RequestMapping(value = "/{id}", method = RequestMethod.POST)
+    public ResponseEntity<Double> addOrder(@PathVariable("id") Integer id, @RequestParam("quantity") Integer quantity,
+                                           @RequestParam("orderType") String orderType) {
+        Double totalPrice = productService.calculatePrice(id, quantity, orderType);
+        if (totalPrice != null) {
+            return new ResponseEntity<>(totalPrice, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 }

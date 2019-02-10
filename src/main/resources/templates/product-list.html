@@ -106,6 +106,7 @@
                                 <th>Order Type</th>
                                 <th>Item Count</th>
                                 <th>Add</th>
+                                <th>Total</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -128,9 +129,14 @@
                                     <!--<a th:href="@{'/products/add/' + ${product.id}}">ADD</a>-->
                                     <a th:onclick="'addOrder('+${product.id}+')'">ADD</a>
                                 </td>
+                                <td th:id="'totalPrice'+${product.id}">0.0</td>
                             </tr>
                             </tbody>
                         </table>
+                        <div style="float: right">
+                            <h3 id="total-price-text">Total Price : <span th:text="${priceLable}"></span></h3>
+                            <a th:href="@{'/calculate'}">Calculate</a>
+                        </div>
                     </div>
                 </div>
                 <!-- /.box-body -->
@@ -158,40 +164,6 @@
                 </div>
             </div>
 
-
-            <div class="box">
-
-                <!-- /.box-header -->
-                <div class="box-body">
-                    <div class="table-responsive">
-                        <table id="calculate-table" class="table table-bordered table-hover dataTable">
-                            <thead>
-                            <tr>
-                                <th>Product Name</th>
-                                <th>Order Type</th>
-                                <th>Ordered Count</th>
-                                <th>Remove</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr th:if="${not #lists.isEmpty(addedProductList)}"
-                                th:each="product :${addedProductList}">
-                                <td th:text="${product.productName}">Product 1</td>
-                                <td>Box</td>
-                                <td>20</td>
-                                <td><a th:href="@{'/products/remove/' + ${product.id}}">Remove</a></td>
-                            </tr>
-                            </tbody>
-                        </table>
-                        <div style="float: right">
-                            <h3 id="total-price-text">Total Price : <span th:text="${priceLable}"></span></h3>
-                            <a th:href="@{'/calculate'}">Calculate</a>
-                        </div>
-                    </div>
-                </div>
-                <!-- /.box-body -->
-
-            </div>
         </section>
         <!-- /.content -->
     </div>
@@ -205,7 +177,7 @@
 
 </div>
 <!-- ./wrapper -->
-<script type="text/javascript" src="/static/js/product.js"></script>
+<script type="text/javascript" src="/static/js/product.js" th:src="@{/js/product.js}"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script src="webjars/bootstrap/3.3.4/js/bootstrap.min.js"></script>
 

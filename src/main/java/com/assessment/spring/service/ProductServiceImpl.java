@@ -71,6 +71,41 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     @Transactional
+    public Double calculatePrice(Integer productId, Integer quantity, String orderType) {
+        Double totalPrice = 0.0;
+        Optional<Product> optional = productRepository.findById(productId);
+        if (optional.isPresent()) {
+            Product product = optional.get();
+            if (orderType.equalsIgnoreCase(OrderType.BOX.toString())) {
+                if (quantity >= 3) {
+                    totalPrice = (product.getBoxPrice() * 90 / 100) * quantity;
+                } else {
+                    totalPrice = product.getBoxPrice() * quantity;
+                }
+            } else if (orderType.equalsIgnoreCase(OrderType.ITEM.toString())) {
+
+                Integer totalItemsInBox = product.getUnitsPerBox();
+                if (quantity < totalItemsInBox) {
+                    totalPrice = product.getUnitPrice() * quantity;
+                } else {
+                    Integer boxCount = quantity / totalItemsInBox;
+                    Integer itemCount = quantity % totalItemsInBox;
+                    if (boxCount >= 3) {
+                        totalPrice = (product.getBoxPrice() * 90 / 100) * boxCount;
+                    } else {
+                        totalPrice = product.getBoxPrice() * boxCount;
+                    }
+                    totalPrice += itemCount * product.getUnitPrice();
+                }
+            }
+        } else {
+            return null;
+        }
+        return totalPrice;
+    }
+
+    @Override
+    @Transactional
     public ProductDto addProduct(ProductDto product) {
         Product newProduct = new Product();
         newProduct.setProductName(product.getProductName());

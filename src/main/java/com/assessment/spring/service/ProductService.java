@@ -21,5 +21,7 @@ public interface ProductService {
 
     Double calculatePrice(List<OrderDto> orderDtos);
 
+    Double calculatePrice(Integer productId, Integer quantity, String orderType);
+
     ProductDto addProduct(ProductDto product);
 }
