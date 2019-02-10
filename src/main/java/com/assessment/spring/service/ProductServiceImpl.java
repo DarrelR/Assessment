@@ -33,6 +33,12 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    public ProductDto findOne(Integer id) {
+        Optional<Product> product = productRepository.findById(id);
+        return product.isPresent() ? new ProductDto(product.get()) : null;
+    }
+
+    @Override
     @Transactional
     public Double calculatePrice(Integer productId, Integer quantity, OrderType orderType) {
         Double totalPrice = null;

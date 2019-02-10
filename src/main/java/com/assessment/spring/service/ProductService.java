@@ -12,6 +12,8 @@ public interface ProductService {
 
     Page<ProductDto> findAllProducts(Pageable pageable);
 
+    ProductDto findOne(Integer id);
+
     Double calculatePrice(Integer productId, Integer quantity, OrderType orderType);
 
     ProductDto addProduct(ProductDto product);
