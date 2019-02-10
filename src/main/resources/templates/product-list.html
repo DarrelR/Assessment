@@ -96,7 +96,7 @@
                 <!-- /.box-header -->
                 <div class="box-body">
                     <div class="table-responsive">
-                        <table id="users-table" class="table table-bordered table-hover dataTable">
+                        <table id="products-table" class="table table-bordered table-hover dataTable">
                             <thead>
                             <tr>
                                 <th>Product Name</th>
@@ -126,16 +126,15 @@
                                 <td width="150px"><input th:id="'itemQuantity'+${product.id}" class="form-control"
                                                          type="number" placeholder="units" min="0"></td>
                                 <td>
-                                    <!--<a th:href="@{'/products/add/' + ${product.id}}">ADD</a>-->
-                                    <a th:onclick="'addOrder('+${product.id}+')'">ADD</a>
+                                    <a th:onclick="'addOrder('+${product.id}+')'" style="cursor: pointer">ADD</a>
                                 </td>
-                                <td th:id="'totalPrice'+${product.id}">0.0</td>
+                                <td class="totalColumn" th:id="'totalPrice'+${product.id}">0.0</td>
                             </tr>
                             </tbody>
                         </table>
                         <div style="float: right">
-                            <h3 id="total-price-text">Total Price : <span th:text="${priceLable}"></span></h3>
-                            <a th:href="@{'/calculate'}">Calculate</a>
+                            <h3>Total Price : <span id="total-price-text">00.00</span></h3>
+                            <a id="calculate-total-btn" style="cursor: pointer">CALCULATE</a>
                         </div>
                     </div>
                 </div>
@@ -177,9 +176,8 @@
 
 </div>
 <!-- ./wrapper -->
-<script type="text/javascript" src="/static/js/product.js" th:src="@{/js/product.js}"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script src="webjars/bootstrap/3.3.4/js/bootstrap.min.js"></script>
-
+<script type="text/javascript" src="/static/js/product.js" th:src="@{/js/product.js}"></script>
 </body>
 </html>

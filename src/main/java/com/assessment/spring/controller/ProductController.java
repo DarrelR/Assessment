@@ -44,7 +44,7 @@ public class ProductController {
         return modelAndView;
     }
 
-    @GetMapping("/add/{id}")
+/*    @GetMapping("/add/{id}")
     public ModelAndView addProductToList(@PathVariable("id") Integer id) {
         ProductDto productDto = productService.findOne(id);
         productList.add(productDto);
@@ -66,5 +66,5 @@ public class ProductController {
         }
         priceLable = "$ " + price;
         return new ModelAndView("redirect:/products");
-    }
+    }*/
 }
