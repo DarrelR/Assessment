@@ -40,14 +40,21 @@ public class ProductController {
         modelAndView.addObject("actionUrl", "/products?");
         modelAndView.addObject("currentPage", page);
         modelAndView.addObject("priceLable", priceLable);
-        modelAndView.addObject("productList", productService.findAllProducts(PageRequest.of(page - 1, 10)));
+        modelAndView.addObject("productList", productService.findAllProducts(PageRequest.of(page - 1, 50)));
         return modelAndView;
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/add/{id}")
     public ModelAndView addProductToList(@PathVariable("id") Integer id) {
         ProductDto productDto = productService.findOne(id);
         productList.add(productDto);
+        return new ModelAndView("redirect:/products");
+    }
+
+    @GetMapping("/remove/{id}")
+    public ModelAndView removeOrderFromList(@PathVariable("id") Integer id) {
+        ProductDto productDto = productService.findOne(id);
+        productList.remove(productDto);
         return new ModelAndView("redirect:/products");
     }
 

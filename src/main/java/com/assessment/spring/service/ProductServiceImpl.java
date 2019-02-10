@@ -1,5 +1,6 @@
 package com.assessment.spring.service;
 
+import com.assessment.spring.dto.OrderDto;
 import com.assessment.spring.dto.ProductDto;
 import com.assessment.spring.model.OrderType;
 import com.assessment.spring.model.Product;
@@ -10,6 +11,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -35,16 +37,35 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public ProductDto findOne(Integer id) {
         Optional<Product> product = productRepository.findById(id);
-        return product.isPresent() ? new ProductDto(product.get()) : null;
+        return product.map(ProductDto::new).orElse(null);
     }
 
     @Override
     @Transactional
-    public Double calculatePrice(Integer productId, Integer quantity, OrderType orderType) {
-        Double totalPrice = null;
-        Optional<Product> optional = productRepository.findById(productId);
-        //optional.ifPresent(Product::new);
+    public Double calculatePrice(List<OrderDto> orderDtos) {
+        Double totalPrice = 0.0;
+        for (OrderDto orderDto : orderDtos) {
+            Optional<Product> optional = productRepository.findById(orderDto.getProductId());
+            if (optional.isPresent()) {
+                Product product = optional.get();
+                if (orderDto.getOrderType().equals(OrderType.BOX)) {
+                    if (orderDto.getQuantity() >= 3) {
+                        Double singleBoxPrice = product.getBoxPrice() * 90 / 100;
+                        totalPrice += singleBoxPrice * orderDto.getQuantity();
+                    } else {
+                        totalPrice += product.getBoxPrice() * orderDto.getQuantity();
+                    }
+                } else if (orderDto.getOrderType().equals(OrderType.ITEM)) {
+                    if (orderDto.getQuantity() >= product.getUnitsPerBox()) {
 
+                    } else {
+                        totalPrice += product.getUnitPrice() * orderDto.getQuantity();
+                    }
+
+                }
+
+            }
+        }
         return totalPrice;
     }
 

@@ -127,7 +127,7 @@
                                 <!--<td><a id="add-item-btn" class="btn btn-primary btn-s">ADD</a>-->
                                 <!--<a id="add-item-btn" class="btn btn-primary btn-s">ADD</a></td>-->
                                 <td>
-                                    <a th:href="@{'/products/' + ${product.id}}">ADD</a>
+                                    <a th:href="@{'/products/add/' + ${product.id}}">ADD</a>
                                 </td>
                             </tr>
                             </tbody>
@@ -165,43 +165,27 @@
                 <!-- /.box-header -->
                 <div class="box-body">
                     <div class="table-responsive">
-                        <table id="users-table" class="table table-bordered table-hover dataTable">
+                        <table id="calculate-table" class="table table-bordered table-hover dataTable">
                             <thead>
                             <tr>
                                 <th>Product Name</th>
-                                <th>Box Price</th>
-                                <th>Units per Box</th>
-                                <th>Item Price</th>
                                 <th>Order Type</th>
-                                <th>Item Count</th>
-                                <th>Add</th>
+                                <th>Ordered Count</th>
+                                <th>Remove</th>
                             </tr>
                             </thead>
                             <tbody>
                             <tr th:if="${not #lists.isEmpty(addedProductList)}"
                                 th:each="product :${addedProductList}">
                                 <td th:text="${product.productName}">Product 1</td>
-                                <td th:text="${product.boxPrice}">85</td>
-                                <td th:text="${product.unitsPerBox}">20</td>
-                                <td th:text="${product.unitPrice}">20</td>
-                                <td>
-                                    <select class="form-control" id="sel1">
-                                        <option th:each="state : ${T(com.assessment.spring.model.OrderType).values()}"
-                                                th:value="${state}"
-                                                th:text="${state}"></option>
-                                    </select>
-                                </td>
-                                <td width="150px"><input class="form-control" type="number" id="itemCount"
-                                                         placeholder="units" min="0"></td>
-                                <td>
-                                    <a th:href="@{'/products/' + ${product.id}}">Remove</a>
-                                </td>
+                                <td>Box</td>
+                                <td>20</td>
+                                <td><a th:href="@{'/products/remove/' + ${product.id}}">Remove</a></td>
                             </tr>
                             </tbody>
                         </table>
                         <div style="float: right">
                             <h3 id="total-price-text">Total Price : <span th:text="${priceLable}"></span></h3>
-
                             <a th:href="@{'/calculate'}">Calculate</a>
                         </div>
                     </div>
