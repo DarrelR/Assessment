@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Product Price Calculator</title>
+    <style>
+        .error-msg {
+            background: #ffffff;
+            padding: 0px 5px;
+            font-color: #ff0000;
+            display: none;
+        }
+    </style>
+
+    <link rel="stylesheet" href="/static/css/products.css" type="text/css" th:href="@{/css/products.css}">
+    <link rel="stylesheet" th:href="@{webjars/bootstrap/3.3.4/css/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/css/table.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.css"/>
+</head>
+
+<body class="hold-transition skin-red sidebar-mini">
+
+<div class="wrapper">
+    <!--/*@thymesVar id="product" type="com.assessment.spring.dto.ProductDto"*/-->
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+            <div>
+                <h1>Product List</h1>
+
+                <!--<h1 class="pull-right">Add Product</h1>-->
+
+                <button type="button" class="btn btn-danger" data-toggle="modal" th:data-target="'#createModalBlog'">Add
+                    Product
+                </button>
+
+                <h3 id="total-price-text">Total Price : 00.00</h3>
+
+                <button type="button" id="calculate-price-btn" class="btn btn-success">Calculate Total</button>
+                <!-- Modal -->
+                <div class="modal fade" th:id="'createModalBlog'" aria-labelledby="blogLabel" role="dialog"
+                     aria-hidden="true">
+                    <!-- <div class="modal-dialog">
+                         <div class="modal-content">
+                             <div class="modal-header">
+                                 <button type="button" class="close"
+                                         data-dismiss="modal"><span
+                                         aria-hidden="true">&times;</span><span
+                                         class="sr-only">Close</span></button>
+                                 <h4 class="modal-title" id="modalPostTitle"><span>Create Product</span></h4>
+                             </div>
+                             <div class="modal-body">
+                                 <div class="event-content">
+                                     <form id="add-deal-form" method="POST" th:object="${product}">
+                                         <div class="event-location">
+                                             <h5><b>Product Name</b></h5>
+                                             <input type="text" placeholder="Enter start price" id="eventTitle"
+                                                    th:field="*{productName}" required>
+                                             <h2></h2>
+                                             <div id="startPriceFormGroup">
+                                                 <span class="error-msg" style="color:red"></span>
+                                             </div>
+                                             <h5><b>Units per Box</b></h5>
+                                             <input type="text" placeholder="Enter end price" id="eventLocation"
+                                                    th:field="*{unitsPerBox}" required>
+                                             <h2></h2>
+                                             <div id="endPriceFormGroup" style="color:red">
+                                                 <span class="error-msg"></span>
+                                             </div>
+                                             <h5><b>Box Price</b></h5>
+                                             <input type="text" placeholder="enter percentage"
+                                                    th:field="*{boxPrice}" required><br>
+                                             <div id="feeFormGroup">
+                                                 <span class="error-msg" style="color:red"></span>
+                                             </div>
+                                         </div>
+                                         <div class="events-nav">
+                                             <button type="submit" id="deal-submit">Submit</button>
+                                         </div>
+                                     </form>
+                                 </div>
+                             </div>
+                         </div>
+                     </div>-->
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- Main content -->
+        <section class="content">
+
+            <div class="box">
+
+                <!-- /.box-header -->
+                <div class="box-body">
+                    <div class="table-responsive">
+                        <table id="users-table" class="table table-bordered table-hover dataTable">
+                            <thead>
+                            <tr>
+                                <th>Product Name</th>
+                                <th>Box Price</th>
+                                <th>Units per Box</th>
+                                <th>Item Price</th>
+                                <th>Order Type</th>
+                                <th>Item Count</th>
+                                <!--<th>Add</th>-->
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:if="${not #lists.isEmpty(productList.getContent())}"
+                                th:each="product :${productList.getContent()}">
+                                <td th:text="${product.productName}">Product 1</td>
+                                <td th:text="${product.boxPrice}">85</td>
+                                <td th:text="${product.unitsPerBox}">20</td>
+                                <td th:text="${product.unitPrice}">20</td>
+                                <td>
+                                    <select class="form-control" id="sel1">
+                                        <option th:each="state : ${T(com.assessment.spring.model.OrderType).values()}"
+                                                th:value="${state}"
+                                                th:text="${state}"></option>
+                                    </select>
+                                </td>
+                                <td width="150px"><input class="form-control" type="number" id="itemCount"
+                                                         placeholder="units" min="0"></td>
+                                <!--<td><a id="add-item-btn" class="btn btn-primary btn-s">ADD</a>-->
+                                    <!--<a id="add-item-btn" class="btn btn-primary btn-s">ADD</a></td>-->
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <!-- /.box-body -->
+                <div class="search-pagination" style="padding-bottom: 1px">
+                    <ul>
+                        <li th:class="${productList.isFirst()}?disabled:not(disabled)">
+                            <a th:if='${productList.isFirst()}'><i class="fa fa-angle-double-left"
+                                                                   aria-hidden="false"></i></a>
+                            <a th:if='${not productList.isFirst()}'
+                               th:href="@{${actionUrl}+'page='+${currentPage-1}}"><i
+                                    class="fa fa-angle-double-left" aria-hidden="false"></i></a></li>
+                        <th:block
+                                th:each="pageNumber: ${#numbers.sequence(1, productList.getTotalPages()==0?1:productList.getTotalPages())}"
+                                style="display: inline-block">
+                            <li th:class="${currentPage}==${pageNumber}?active:not(active)"><a
+                                    th:href="@{${actionUrl}+'page='+${pageNumber}}" th:text="${pageNumber}">1</a></li>
+                        </th:block>
+                        <li th:class="${productList.isLast()}?disabled:not(disabled)">
+                            <a th:if='${productList.isLast()}'><i class="fa fa-angle-double-right"
+                                                                  aria-hidden="true"></i></a>
+                            <a th:if='${not productList.isLast()}' th:href="@{${actionUrl}+'page='+${currentPage+1}}"><i
+                                    class="fa fa-angle-double-right"
+                                    aria-hidden="true"></i></a></li>
+                    </ul>
+                </div>
+            </div>
+
+        </section>
+        <!-- /.content -->
+    </div>
+    <!-- /.content-wrapper -->
+
+    <!-- Main Footer -->
+    <footer th:fragment="footer" class="main-footer">
+        <!-- Default to the left -->
+        <strong>Copyright &copy; 2019<a href="#">Company</a>.</strong> All rights reserved.
+    </footer>
+
+</div>
+<!-- ./wrapper -->
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="webjars/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+
+</body>
+</html>
